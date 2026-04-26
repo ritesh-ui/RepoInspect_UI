@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RepoInspect | Deterministic AI Security Engine</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Outfit:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #030712;
+            --accent: #6366f1;
+            --text: #f3f4f6;
+            --text-dim: #9ca3af;
+            --card-bg: #111827;
+            --border: #1f2937;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3 { font-family: 'Outfit', sans-serif; }
+
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 2rem; }
+
+        /* Navbar */
+        nav {
+            padding: 1.5rem 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+        }
+        .logo { font-size: 1.5rem; font-weight: 800; letter-spacing: -1px; color: var(--text); }
+        .logo span { color: var(--accent); }
+
+        /* Hero Section */
+        .hero { padding: 8rem 0 5rem; text-align: center; position: relative; }
+        .hero h1 { font-size: 4rem; font-weight: 800; margin-bottom: 1.5rem; letter-spacing: -2px; line-height: 1.1; }
+        .hero p { font-size: 1.25rem; color: var(--text-dim); max-width: 700px; margin: 0 auto 2.5rem; }
+        .btn {
+            background-color: var(--accent);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3); }
+
+        .hero-img { margin-top: 4rem; border-radius: 20px; border: 1px solid var(--border); box-shadow: 0 40px 100px rgba(0,0,0,0.5); width: 100%; max-width: 900px; }
+
+        /* Stats Section */
+        .stats { padding: 5rem 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; text-align: center; }
+        .stat-card h3 { font-size: 3rem; color: var(--accent); margin-bottom: 0.5rem; }
+        .stat-card p { color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; font-size: 0.8rem; font-weight: 700; }
+
+        /* Case Studies */
+        .case-studies { padding: 5rem 0; }
+        .case-studies h2 { font-size: 2.5rem; margin-bottom: 3rem; text-align: center; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+        .card { background: var(--card-bg); padding: 2rem; border-radius: 16px; border: 1px solid var(--border); transition: border-color 0.3s ease; }
+        .card:hover { border-color: var(--accent); }
+        .card h4 { font-size: 1.25rem; margin-bottom: 1rem; }
+        .card .tag { background: rgba(99, 102, 241, 0.1); color: var(--accent); padding: 0.25rem 0.75rem; border-radius: 99px; font-size: 0.75rem; font-weight: 700; margin-bottom: 1rem; display: inline-block; }
+        .card p { color: var(--text-dim); font-size: 0.95rem; margin-bottom: 1.5rem; }
+        .card a { color: var(--text); text-decoration: none; font-weight: 600; font-size: 0.9rem; border-bottom: 1px solid var(--accent); }
+
+        /* CTA Section */
+        .cta-section { padding: 8rem 0; text-align: center; background: linear-gradient(to bottom, var(--bg), #0f172a); border-radius: 40px; margin: 4rem 0; }
+        .cta-section h2 { font-size: 3rem; margin-bottom: 1.5rem; }
+        .cta-section p { color: var(--text-dim); margin-bottom: 2.5rem; font-size: 1.2rem; }
+
+        footer { padding: 4rem 0; text-align: center; border-top: 1px solid var(--border); color: var(--text-dim); font-size: 0.9rem; }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .hero p { font-size: 1.1rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <div class="logo">Repo<span>Inspect</span></div>
+            <a href="mailto:riteshsingh545@gmail.com" class="btn" style="padding: 0.6rem 1.2rem; font-size: 0.9rem;">Get an Audit</a>
+        </nav>
+
+        <section class="hero">
+            <h1>The Deterministic<br><span>AI Security Engine.</span></h1>
+            <p>RepoInspect merges AST-aware taint tracking with autonomous AI agents to eliminate the "False Positive Tax" in your AI-native applications.</p>
+            <a href="https://github.com/ritesh-ui/RepoInspect" class="btn">View on GitHub</a>
+            <div style="margin-top: 5rem;">
+                <!-- Replace with your hero image URL -->
+                <img src="https://raw.githubusercontent.com/ritesh-ui/RepoInspect/main/assets/hero.png" class="hero-img" alt="RepoInspect Dashboard Preview">
+            </div>
+        </section>
+
+        <section class="stats">
+            <div class="stat-card">
+                <h3>51</h3>
+                <p>Vulnerabilities Found</p>
+            </div>
+            <div class="stat-card">
+                <h3>0</h3>
+                <p>False Positives</p>
+            </div>
+            <div class="stat-card">
+                <h3><$2</h3>
+                <p>Cost Per Scan</p>
+            </div>
+        </section>
+
+        <section class="case-studies">
+            <h2>Proven Expertise</h2>
+            <div class="grid">
+                <div class="card">
+                    <div class="tag">AUDITED</div>
+                    <h4>Dify LLM Platform</h4>
+                    <p>Identified 28 high-severity SQL Injection vulnerabilities in Vector DB adapters.</p>
+                    <a href="https://github.com/ritesh-ui/RepoInspect/blob/main/reports/benchmarks/RESULTS_DIFY.md">View Case Study →</a>
+                </div>
+                <div class="card">
+                    <div class="tag">AUDITED</div>
+                    <h4>Mem0 (AI Memory)</h4>
+                    <p>Found 23 high-severity risks including Prompt Injection and Vector DB exposure.</p>
+                    <a href="https://github.com/ritesh-ui/RepoInspect/blob/main/reports/benchmarks/RESULTS_MEM0.md">View Case Study →</a>
+                </div>
+                <div class="card">
+                    <div class="tag">AUDITED</div>
+                    <h4>OpenAI Agents SDK</h4>
+                    <p>Verified 10 high-risk command and SQL injection vulnerabilities.</p>
+                    <a href="https://github.com/ritesh-ui/RepoInspect/blob/main/reports/benchmarks/RESULTS_OPENAI_SDK.md">View Case Study →</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta-section">
+            <h2>Secure your AI stack today.</h2>
+            <p>Building an AI-native app? Don't leave your vector DBs and agent logic exposed. Get a professional forensic audit.</p>
+            <a href="mailto:riteshsingh545@gmail.com?subject=RepoInspect%20Audit%20Request" class="btn">Request a Private Audit</a>
+        </section>
+
+        <footer>
+            <p>&copy; 2024 RepoInspect. Built for the AI-native era.</p>
+            <p style="margin-top: 1rem;"><a href="https://www.linkedin.com/in/ritesh-singh-6619ab190" style="color: var(--accent); text-decoration: none;">Connect on LinkedIn</a></p>
+        </footer>
+    </div>
+</body>
+</html>
