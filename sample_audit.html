@@ -1,0 +1,390 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RepoInspect | Forensic Audit Report</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0c10;
+            --card-bg: #161b22;
+            --border: #30363d;
+            --text-main: #c9d1d9;
+            --text-bright: #ffffff;
+            --accent-blue: #58a6ff;
+            --accent-purple: #bc8cff;
+            --critical: #ff7b72;
+            --high: #ffa657;
+            --medium: #d29922;
+            --low: #3fb950;
+            --glass: rgba(255, 255, 255, 0.05);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            background-color: var(--bg); 
+            color: var(--text-main); 
+            font-family: 'Inter', sans-serif; 
+            padding: 60px 40px;
+            line-height: 1.6;
+        }
+
+        .container { max-width: 1100px; margin: 0 auto; }
+
+        /* --- Header --- */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 30px;
+            margin-bottom: 60px;
+        }
+
+        .logo { 
+            font-weight: 800; 
+            font-size: 1.8rem; 
+            color: var(--text-bright); 
+            letter-spacing: -1px;
+        }
+        .logo span { color: var(--accent-blue); }
+        
+        .report-meta { 
+            text-align: right; 
+            font-size: 0.9rem; 
+            color: var(--text-main);
+            opacity: 0.8;
+        }
+
+        /* --- Executive Summary --- */
+        .summary-box {
+            background: linear-gradient(135deg, #161b22, #0d1117);
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 50px;
+            border: 1px solid var(--border);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .summary-box::before {
+            content: '';
+            position: absolute;
+            top: 0; right: 0;
+            width: 200px; height: 200px;
+            background: radial-gradient(circle, rgba(88,166,255,0.1) 0%, transparent 70%);
+        }
+
+        .summary-box h1 { 
+            color: var(--text-bright); 
+            font-size: 2.8rem; 
+            margin-bottom: 15px;
+            font-weight: 800;
+        }
+        
+        .target-info {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+        }
+        
+        .target-info strong { color: var(--accent-blue); }
+
+        .stats-grid { 
+            display: grid; 
+            grid-template-columns: repeat(4, 1fr); 
+            gap: 20px; 
+            margin-top: 30px; 
+        }
+        
+        .stat-item { 
+            padding: 20px; 
+            border-radius: 12px; 
+            background: var(--glass); 
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+        
+        .stat-label { 
+            font-size: 0.75rem; 
+            text-transform: uppercase; 
+            letter-spacing: 1.5px; 
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        .stat-value { font-size: 2.2rem; font-weight: 800; }
+
+        /* --- Finding Cards --- */
+        .finding-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            padding: 40px;
+            margin-bottom: 40px;
+            transition: all 0.3s;
+        }
+        
+        .finding-card:hover {
+            border-color: var(--accent-blue);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .finding-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 25px; 
+        }
+        
+        .finding-title { font-size: 1.6rem; font-weight: 800; color: var(--text-bright); }
+        
+        .badge {
+            padding: 6px 16px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-critical { background: rgba(255, 123, 114, 0.2); color: var(--critical); border: 1px solid var(--critical); }
+        .badge-high { background: rgba(255, 166, 87, 0.2); color: var(--high); border: 1px solid var(--high); }
+        .badge-medium { background: rgba(210, 153, 34, 0.2); color: var(--medium); border: 1px solid var(--medium); }
+        .badge-low { background: rgba(63, 185, 80, 0.2); color: var(--low); border: 1px solid var(--low); }
+
+        .location { 
+            font-family: 'JetBrains Mono', monospace; 
+            font-size: 0.9rem; 
+            color: var(--accent-blue); 
+            margin-bottom: 25px; 
+            display: block; 
+            opacity: 0.9;
+        }
+
+        .section-header { 
+            font-weight: 800; 
+            color: var(--text-bright); 
+            margin-bottom: 12px; 
+            display: block; 
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .syntax-block {
+            background: #010409;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.95rem;
+            margin-bottom: 30px;
+            border-left: 4px solid var(--accent-blue);
+            color: #d1d5da;
+            overflow-x: auto;
+            white-space: pre;
+        }
+
+        .finding-description { margin-bottom: 30px; font-size: 1.05rem; opacity: 0.95; }
+
+        .remediation {
+            background: rgba(88, 166, 255, 0.05);
+            border: 1px solid rgba(88, 166, 255, 0.2);
+            padding: 25px;
+            border-radius: 12px;
+        }
+
+        footer { 
+            text-align: center; 
+            padding: 60px 0; 
+            font-size: 0.85rem; 
+            opacity: 0.6; 
+            border-top: 1px solid var(--border); 
+            margin-top: 80px; 
+        }
+
+        @media print {
+            body { padding: 0; background: white; color: black; }
+            .finding-card { break-inside: avoid; border: 1px solid #ddd; page-break-after: always; }
+            .summary-box { background: #f5f5f5; color: black; border: 1px solid #ddd; }
+            .syntax-block { background: #f8f8f8; color: black; border: 1px solid #ddd; }
+            .badge { border: 1px solid black; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">Repo<span>Inspect</span> Forensic</div>
+            <div class="report-meta">
+                ID: RI-2408<br>
+                Date: May 03, 2026<br>
+                Status: Final Audit
+            </div>
+        </header>
+
+        <section class="summary-box">
+            <h1>Executive Security Summary</h1>
+            <div class="target-info">
+                <div>Target: <strong>test_cases</strong></div>
+                <div>AI Stack: <strong>LangChain, OpenAI</strong></div>
+            </div>
+            
+            <p>This report contains a deep-dive forensic analysis of potential security vulnerabilities detected in the repository infrastructure. All findings have been verified via RepoInspect's AST-Aware Security Engine.</p>
+
+            <div class="stats-grid">
+                <div class="stat-item"><div class="stat-label" style="color: var(--critical)">Critical</div><span class="stat-value" style="color: var(--critical)">0</span></div>
+                <div class="stat-item"><div class="stat-label" style="color: var(--high)">High</div><span class="stat-value" style="color: var(--high)">6</span></div>
+                <div class="stat-item"><div class="stat-label" style="color: var(--medium)">Medium</div><span class="stat-value" style="color: var(--medium)">0</span></div>
+                <div class="stat-item"><div class="stat-label" style="color: var(--low)">Low</div><span class="stat-value" style="color: var(--low)">0</span></div>
+            </div>
+        </section>
+
+        <section class="findings">
+            
+<div class="finding-card">
+    <div class="finding-header">
+        <div class="finding-title">Command Injection via shell=True</div>
+        <div class="badge badge-high">High</div>
+    </div>
+    <span class="location">Location: test_cases/cmd_injection_logic.py (Line 15)</span>
+
+    <span class="section-header">Forensic Evidence</span>
+    <div class="syntax-block">subprocess.run(f"ls {user_input}", shell=True)</div>
+
+    <span class="section-header">Description & Analysis</span>
+    <p class="finding-description">
+        Using shell=True with subprocess allows attackers to execute arbitrary shell commands through user input.<br><br>
+        <strong>Attack Vector:</strong> An attacker can input malicious commands, leading to unintended command execution on the host system.
+    </p>
+
+    <div class="remediation">
+        <span class="section-header" style="color: var(--accent-blue)">🛡 Recommended Remediation</span>
+        <p>Use a list of arguments without shell=True, like subprocess.run(['ls', user_input]).</p>
+    </div>
+</div>
+
+<div class="finding-card">
+    <div class="finding-header">
+        <div class="finding-title">Command Injection via shell=True</div>
+        <div class="badge badge-high">High</div>
+    </div>
+    <span class="location">Location: test_cases/cmd_injection_logic.py (Line 16)</span>
+
+    <span class="section-header">Forensic Evidence</span>
+    <div class="syntax-block">subprocess.check_call("echo " + user_input, shell=True)</div>
+
+    <span class="section-header">Description & Analysis</span>
+    <p class="finding-description">
+        Using shell=True with subprocess can allow attackers to execute arbitrary commands through the injection of user input.<br><br>
+        <strong>Attack Vector:</strong> An attacker could include shell metacharacters in user_input, resulting in unexpected command execution.
+    </p>
+
+    <div class="remediation">
+        <span class="section-header" style="color: var(--accent-blue)">🛡 Recommended Remediation</span>
+        <p>Avoid shell=True and pass a list of arguments instead, like subprocess.check_call(['echo', user_input]).</p>
+    </div>
+</div>
+
+<div class="finding-card">
+    <div class="finding-header">
+        <div class="finding-title">Command Injection via os.system</div>
+        <div class="badge badge-high">High</div>
+    </div>
+    <span class="location">Location: test_cases/cmd_injection_logic.py (Line 20)</span>
+
+    <span class="section-header">Forensic Evidence</span>
+    <div class="syntax-block">os.system(f"rm -rf {user_input}")</div>
+
+    <span class="section-header">Description & Analysis</span>
+    <p class="finding-description">
+        Using os.system with user input can lead to arbitrary command execution, causing critical security risks.<br><br>
+        <strong>Attack Vector:</strong> An attacker could provide input that leads to the deletion of critical files or unauthorized data access.
+    </p>
+
+    <div class="remediation">
+        <span class="section-header" style="color: var(--accent-blue)">🛡 Recommended Remediation</span>
+        <p>Use safer alternatives like subprocess.run with a list of arguments, and avoid os.system.</p>
+    </div>
+</div>
+
+<div class="finding-card">
+    <div class="finding-header">
+        <div class="finding-title">Command Injection via os.popen</div>
+        <div class="badge badge-high">High</div>
+    </div>
+    <span class="location">Location: test_cases/cmd_injection_logic.py (Line 21)</span>
+
+    <span class="section-header">Forensic Evidence</span>
+    <div class="syntax-block">os.popen(f"cat {user_input}")</div>
+
+    <span class="section-header">Description & Analysis</span>
+    <p class="finding-description">
+        Using os.popen with unsanitized user input exposes the application to command injection vulnerabilities.<br><br>
+        <strong>Attack Vector:</strong> An attacker can input malicious data leading to arbitrary command execution on the system.
+    </p>
+
+    <div class="remediation">
+        <span class="section-header" style="color: var(--accent-blue)">🛡 Recommended Remediation</span>
+        <p>Use safer command-execution techniques, ensuring user input is properly sanitized or validated.</p>
+    </div>
+</div>
+
+<div class="finding-card">
+    <div class="finding-header">
+        <div class="finding-title">Unsafe eval usage</div>
+        <div class="badge badge-high">High</div>
+    </div>
+    <span class="location">Location: test_cases/cmd_injection_logic.py (Line 25)</span>
+
+    <span class="section-header">Forensic Evidence</span>
+    <div class="syntax-block">eval(user_input)</div>
+
+    <span class="section-header">Description & Analysis</span>
+    <p class="finding-description">
+        Using eval with user input can execute arbitrary code, making it one of the most dangerous code execution risks.<br><br>
+        <strong>Attack Vector:</strong> An attacker can input malicious Python code, leading to remote code execution and potentially full system compromise.
+    </p>
+
+    <div class="remediation">
+        <span class="section-header" style="color: var(--accent-blue)">🛡 Recommended Remediation</span>
+        <p>Avoid using eval and exec with user-controlled inputs entirely. Consider alternative approaches to achieve your goal.</p>
+    </div>
+</div>
+
+<div class="finding-card">
+    <div class="finding-header">
+        <div class="finding-title">Unsafe Eval/Exec Usage</div>
+        <div class="badge badge-high">High</div>
+    </div>
+    <span class="location">Location: test_cases/cmd_injection_logic.py (Line 26)</span>
+
+    <span class="section-header">Forensic Evidence</span>
+    <div class="syntax-block">exec("print(" + user_input + ")")</div>
+
+    <span class="section-header">Description & Analysis</span>
+    <p class="finding-description">
+        The use of eval() and exec() with user input is highly dangerous and can lead to arbitrary code execution. Any malicious code provided by the user will be executed.<br><br>
+        <strong>Attack Vector:</strong> An attacker could input malicious code as 'os.system('ls')' to execute arbitrary system commands or any other harmful operations.
+    </p>
+
+    <div class="remediation">
+        <span class="section-header" style="color: var(--accent-blue)">🛡 Recommended Remediation</span>
+        <p>Avoid using eval() and exec() with untrusted input. Consider using safer alternatives or validating and sanitizing input before executing.</p>
+    </div>
+</div>
+
+        </section>
+
+        <footer>
+            &copy; 2026 RepoInspect Security. Branded Forensic Report.<br>
+            For private audits, contact riteshsingh545@gmail.com
+        </footer>
+    </div>
+</body>
+</html>
